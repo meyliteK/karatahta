@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "103847336237",
+    "project_id": "karatahta-f1e79",
+    "storage_bucket": "karatahta-f1e79.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103847336237:android:ee6578040374b80063dba4",
+        "android_client_info": {
+          "package_name": "com.example.karatahta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlYBumiU4BeQRzFofng8XKk6clwYmzXwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
