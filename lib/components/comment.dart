@@ -16,22 +16,22 @@ class Comment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(4),
       ),
       margin: const EdgeInsets.only(bottom: 5),
       padding: const EdgeInsets.all(15),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(text),
+        Text(text, style: TextStyle(fontSize:16)),
         const SizedBox(height: 5),
         Row(
           children: [
             Text(
               user,
-              style: TextStyle(color: Colors.grey[400]),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,fontSize:13),
             ),
-            Text(" - ", style: TextStyle(color: Colors.grey[400])),
-            Text(time, style: TextStyle(color: Colors.grey[400])),
+            Text(" - ", style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,fontSize:13)),
+            Text(time, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary,fontSize:13)),
           ],
         ),
       ]),

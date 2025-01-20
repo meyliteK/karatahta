@@ -9,10 +9,11 @@ import 'package:karatahta/helper/helper_methods.dart';
 
 class WallPost extends StatefulWidget {
   final String message;
-  final String user;
+  final String user; // Kullanıcı adı için kullanılıyor
   final String time;
   final String postId;
   final List<String> likes;
+
   const WallPost({
     super.key,
     required this.message,
@@ -57,16 +58,27 @@ class _WallPostState extends State<WallPost> {
     }
   }
 
-  void addComment(String commentText) {
-    FirebaseFirestore.instance
-        .collection("User Posts")
-        .doc(widget.postId)
-        .collection("Comments")
-        .add({
-      "CommentText": commentText,
-      "CommentedBy": currentUser.email,
-      "CommentTime": Timestamp.now()
-    });
+  void addComment(String commentText) async {
+    if (commentText.isNotEmpty) {
+      // Kullanıcının username bilgisini al
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(currentUser.email)
+          .get();
+
+      String username = userDoc['username'];
+
+      // Yorumu ekle
+      FirebaseFirestore.instance
+          .collection("User Posts")
+          .doc(widget.postId)
+          .collection("Comments")
+          .add({
+        "CommentText": commentText,
+        "CommentedBy": username, // Kullanıcı adı eklendi
+        "CommentTime": Timestamp.now()
+      });
+    }
   }
 
   void showCommentDialog() {
@@ -75,7 +87,7 @@ class _WallPostState extends State<WallPost> {
       builder: (context) => AlertDialog(
         content: TextField(
           controller: _commentTextController,
-          decoration: InputDecoration(hintText: "Write a comment.."),
+          decoration: InputDecoration(hintText: "Bir Yorum Ekle.."),
         ),
         actions: [
           TextButton(
@@ -84,35 +96,34 @@ class _WallPostState extends State<WallPost> {
 
               _commentTextController.clear();
             },
-            child: Text("Cancel"),
+            child: Text("İptal"),
           ),
           TextButton(
             onPressed: () {
-              //add comment
+              // Yorum ekle
               addComment(_commentTextController.text);
-              //pop box
+              // Pencereden çık
               Navigator.pop(context);
-              //clear controller
+              // Controller temizle
               _commentTextController.clear();
             },
-            child: Text("Post"),
+            child: Text("Gönder"),
           ),
         ],
       ),
     );
   }
 
-  //delete a post
   void deletePost() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete Post"),
-        content: const Text("Are you sure you want to delete this post?"),
+        title: const Text("Gönderiyi Sil"),
+        content: const Text("Bu gönderiyi silmek istediğine emin misin?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+            child: const Text("İptal"),
           ),
           TextButton(
             onPressed: () async {
@@ -134,13 +145,13 @@ class _WallPostState extends State<WallPost> {
                   .collection("User Posts")
                   .doc(widget.postId)
                   .delete()
-                  .then((value) => print("post deleted"))
+                  .then((value) => print("Gönderi silindi"))
                   .catchError(
-                      (error) => print("failed to delete post: $error"));
+                      (error) => print("Failed to delete post: $error"));
 
               Navigator.pop(context);
             },
-            child: const Text("Delete"),
+            child: const Text("Sil"),
           ),
         ],
       ),
@@ -151,7 +162,7 @@ class _WallPostState extends State<WallPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
@@ -159,7 +170,7 @@ class _WallPostState extends State<WallPost> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //wallpost
+          // Post içerik
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,24 +178,24 @@ class _WallPostState extends State<WallPost> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //message
-                  Text(widget.message),
+                  // Mesaj
+                  Text(widget.message , style: TextStyle(fontSize:16)),
                   const SizedBox(height: 5),
 
                   Row(
                     children: [
                       Text(
-                        widget.user,
-                        style: TextStyle(color: Colors.grey[400]),
+                        widget.user, // Kullanıcı adı buraya alındı
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize:13),
                       ),
-                      Text(" - ", style: TextStyle(color: Colors.grey[400])),
+                      Text(" - ", style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize:13)),
                       Text(widget.time,
-                          style: TextStyle(color: Colors.grey[400])),
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize:13 )),
                     ],
                   ),
                 ],
               ),
-              //delete button
+              // Silme butonu
               if (widget.user == currentUser.email)
                 DeleteButton(onTap: deletePost),
             ],
@@ -193,7 +204,7 @@ class _WallPostState extends State<WallPost> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //like
+              // Beğeni
               Column(
                 children: [
                   LikeButton(
@@ -203,23 +214,23 @@ class _WallPostState extends State<WallPost> {
 
                   const SizedBox(height: 5),
 
-                  //like count
+                  // Beğeni sayısı
                   Text(
                     widget.likes.length.toString(),
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 100),
 
-              //comment
+              // Yorum
               Column(
                 children: [
                   CommentButton(onTap: showCommentDialog),
 
                   const SizedBox(height: 5),
 
-                  //like count
+                  // Beğeni sayısı
                   Text(
                     '0',
                     style: const TextStyle(color: Colors.grey),
@@ -230,7 +241,7 @@ class _WallPostState extends State<WallPost> {
           ),
 
           const SizedBox(width: 20),
-          //comments under the post
+          // Yorumlar
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("User Posts")
@@ -252,7 +263,7 @@ class _WallPostState extends State<WallPost> {
 
                   return Comment(
                     text: commentData["CommentText"],
-                    user: commentData["CommentedBy"],
+                    user: commentData["CommentedBy"], // Kullanıcı adı buraya alındı
                     time: formatDate(commentData["CommentTime"]),
                   );
                 }).toList(),

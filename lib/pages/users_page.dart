@@ -4,17 +4,26 @@ import 'package:karatahta/components/my_list_tile.dart';
 import 'package:karatahta/helper/helper_functions.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({super.key});
+  final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const UsersPage({super.key, required this.toggleTheme, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Users"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Kullanıcılar"),
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(isDarkMode ? Icons.nightlight_round : Icons.wb_sunny),
+            onPressed: toggleTheme,
+          ),
+        ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Users").snapshots(),
         builder: (context, snapshot) {
@@ -31,7 +40,7 @@ class UsersPage extends StatelessWidget {
           }
 
           if (snapshot.data == null) {
-            return const Text("No Data");
+            return const Text("Veri Yok");
           }
 
           //get all users
@@ -76,3 +85,8 @@ class UsersPage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+

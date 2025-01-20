@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^5.5.0
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.10.0
   flutter_test:
     sdk: flutter
 
@@ -91,3 +92,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "web/icons/karatahta.png" # Logo dosyanızın yolunu buraya yazın

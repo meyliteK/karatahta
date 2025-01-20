@@ -1,2 +1,3 @@
 # karatahta
-OKAY
+
+Sosyal Medya Uygulaması

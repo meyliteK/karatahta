@@ -11,7 +11,7 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Column(
@@ -19,7 +19,8 @@ class MyDrawer extends StatelessWidget {
             DrawerHeader(
               child: Icon(
                 Icons.my_library_books,
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Colors.black,
+                size: 100
               ),
             ),
             const SizedBox(height: 25),
@@ -28,9 +29,9 @@ class MyDrawer extends StatelessWidget {
               child: ListTile(
                 leading: Icon(
                   Icons.home,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Colors.black,
                 ),
-                title: const Text("HOME"),
+                title: const Text("ANA SAYFA"),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -41,9 +42,9 @@ class MyDrawer extends StatelessWidget {
               child: ListTile(
                 leading: Icon(
                   Icons.person,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Colors.black,
                 ),
-                title: const Text("PROFİLE"),
+                title: const Text("PROFİL"),
                 onTap: () {
                   Navigator.pop(context);
 
@@ -56,13 +57,28 @@ class MyDrawer extends StatelessWidget {
               child: ListTile(
                 leading: Icon(
                   Icons.group,
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Colors.black,
                 ),
-                title: const Text("USERS"),
+                title: const Text("KULLANICILAR"),
                 onTap: () {
                   Navigator.pop(context);
 
                   Navigator.pushNamed(context, '/users_page');
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: ListTile(
+                leading: Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                ),
+                title: const Text("GÖNDERİLERİM"),
+                onTap: () {
+                  Navigator.pop(context);
+
+                  Navigator.pushNamed(context, '/posts_page');
                 },
               ),
             ),
@@ -73,9 +89,9 @@ class MyDrawer extends StatelessWidget {
           child: ListTile(
             leading: Icon(
               Icons.logout,
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Colors.black,
             ),
-            title: const Text("LOGOUT"),
+            title: const Text("ÇIKIŞ YAP"),
             onTap: () {
               Navigator.pop(context);
 

@@ -7,7 +7,10 @@ import 'package:karatahta/components/wall_post.dart';
 import 'package:karatahta/helper/helper_methods.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const HomePage({super.key, required this.toggleTheme, required this.isDarkMode});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,9 +40,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text("HOME"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Ana Sayfa"),
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(widget.isDarkMode ? Icons.nightlight_round : Icons.wb_sunny),
+            onPressed: widget.toggleTheme,
+          ),
+        ],
       ),
       drawer: const MyDrawer(),
       body: Center(
@@ -87,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: MyTextField(
                       controller: textController,
-                      hintText: 'Write something on the wall..',
+                      hintText: 'Bir Şeyler Yaz...',
                       obscureText: false,
                     ),
                   ),
@@ -98,10 +107,11 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Text("Logged in as: ${currentUser.email!}"),
+            Text("${currentUser.email!} hesabıyla giriş yapıldı"),
           ],
         ),
       ),
     );
   }
 }
+
